@@ -1,7 +1,6 @@
 #TM-PG-VG
 #from pympler import asizeof
 #ceci est un test
-#nouvelle branche
 
 class huffman:
     @staticmethod
