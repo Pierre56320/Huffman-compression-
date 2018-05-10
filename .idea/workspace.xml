@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1ad4886b-9130-4ed6-8d34-cdf0c03ed8f0" name="Default" comment="test">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Construction_arbre.py" afterPath="$PROJECT_DIR$/Construction_arbre.py" />
-    </list>
+    <list default="true" id="1ad4886b-9130-4ed6-8d34-cdf0c03ed8f0" name="Default" comment="test" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
