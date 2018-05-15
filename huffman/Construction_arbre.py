@@ -47,7 +47,7 @@ class huffman:
 
     @staticmethod
     def encodage(arbre, chaine):
-        code_binaire = dict((arbre[bits], bits) for bits in arbre)
+        code_binaire = dict((bits, arbre[bits]) for bits in arbre)
         chaine_binaire = ''
         for c in chaine:
             chaine_binaire = chaine_binaire + code_binaire[c]
