@@ -1,6 +1,6 @@
 #TM-PG-VG
 #from pympler import asizeof
-#test
+#testrez
 class huffman:
     @staticmethod
     def occurrence(chaine):
