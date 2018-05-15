@@ -42,8 +42,12 @@ class huffman:
         return codes
 
     @staticmethod
-    def encodage(codes, mot):
-        return "codé" #à completer
+    def encodage(arbre, chaine):
+        code_binaire = dict((arbre[bits], bits) for bits in arbre)
+        chaine_binaire = ''
+        for c in chaine:
+            chaine_binaire = chaine_binaire + code_binaire[c]
+        return chaine_binaire
 
     @classmethod
     def decodage(cls, codes, code):
