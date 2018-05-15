@@ -45,9 +45,14 @@ class huffman:
     def encodage(codes, mot):
         return "codé" #à completer
 
-    @staticmethod
-    def decodage(codes, code):
-        return "décodé" #à completer
+    @classmethod
+    def decodage(cls, codes, code):
+        chaine = ''
+        i = ''
+        if code:
+            i += next([bits for bits in code])
+            chaine = codes[str(i)] + cls.decodage(codes, code[len(str(i)):])
+        return chaine
 
 
 
