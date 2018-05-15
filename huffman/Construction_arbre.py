@@ -91,6 +91,14 @@ class h_objet():
         self.hobjet = huffman.decodage(huffman.trouver_Codes(self.hobjet[0]),self.hobjet[1])
 
 
+def encodage(chaine, arbre):
+    code_binaire = dict((arbre[bits], bits) for bits in arbre)
+    chaine_binaire = ''                        
+    for c in chaine:
+        chaine_binaire = chaine_binaire + code_binaire[c]
+    return chaine_binaire
+
+
 if __name__ == "__main__":
     """
     suite = h_objet("ABRACADABRA")
