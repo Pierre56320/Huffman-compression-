@@ -1,6 +1,9 @@
 #TM-PG-VG
 #from pympler import asizeof
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 class huffman:
     @staticmethod
@@ -43,12 +46,21 @@ class huffman:
         return codes
 
     @staticmethod
-    def encodage(codes, mot):
-        return "codé" #à completer
+    def encodage(arbre, chaine):
+        code_binaire = dict((arbre[bits], bits) for bits in arbre)
+        chaine_binaire = ''
+        for c in chaine:
+            chaine_binaire = chaine_binaire + code_binaire[c]
+        return chaine_binaire
 
-    @staticmethod
-    def decodage(codes, code):
-        return "décodé" #à completer
+    @classmethod
+    def decodage(cls, codes, code):
+        chaine = ''
+        i = ''
+        if code:
+            i += next([bits for bits in code])
+            chaine = codes[str(i)] + cls.decodage(codes, code[len(str(i)):])
+        return chaine
 
 
 
