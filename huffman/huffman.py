@@ -37,26 +37,23 @@ def trouver_Codes(arbre):
     code_courant('', arbre)
     return codes
 
-def encodage(chaine, codes):
-    print("chaine : ", chaine)
-    print("codes : ", codes)
-    code_binaire = codes
+def encodage(chaine, codes_binaire):
     chaine_binaire = ''
     for c in chaine:
-        chaine_binaire = chaine_binaire + code_binaire[c]
-    return bin(int(chaine_binaire,2))
+        chaine_binaire = chaine_binaire + codes_binaire[c]
+    return bin(int('1'+chaine_binaire,2)) #on ajoute un 1 de manière a garder les 0 en debut de chaine
 
-def decodage(code,texte_binaire):
-    texte = ''
+def decodage(codes, mot_binaire):
+    mot_decode = ''
     tampon = ''
-    texte_binaire = str(texte_binaire)
-    print(texte_binaire)
-    for b in texte_binaire:
+    mot_binaire = mot_binaire[3:] #on ignore le 1 du debut de chaine
+    codes = {v: k for k, v in codes.items()}
+    for b in mot_binaire:
         tampon = tampon+b
-        if tampon in code:
-            texte = texte+code[tampon]
+        if tampon in codes:
+            mot_decode = mot_decode + codes[tampon]
             tampon = ''
-    return texte
+    return mot_decode
 
 def afficher_arbre(arbre, valeurs):
     affichage = []
@@ -71,7 +68,6 @@ def afficher_arbre(arbre, valeurs):
             affichage[profondeur].append("#")
             code_courant(noeud[0], profondeur + 1)
             code_courant(noeud[1], profondeur + 1)
-
     code_courant(arbre, 0)
     for ligne in affichage:
         for caractere in ligne:
@@ -81,11 +77,16 @@ def afficher_arbre(arbre, valeurs):
                 print(caractere, end=' ')
         print('\n')
 
+def compresser(chaine):
+    codes_binaires = trouver_Codes(cree_arbre(occurrence(chaine)))
+    return (encodage(chaine,codes_binaires),codes_binaires)
+
+def decompresser(mot_binaire,codes_binaires):
+    return decodage(codes_binaires,mot_binaire)
+
+
 if __name__ == "__main__":
-    chaine = "BONJOUR TOUT LE MONDE"
-    arbre = trouver_Codes(cree_arbre(occurrence(chaine)))
-    print(arbre)
-    code = encodage(chaine,arbre)
-    print(arbre,code)
-    decode = decodage(arbre,code)
-    print(decode)
+    chaine = "ceci est un test de compréssion"
+    a = compresser(chaine)
+    b= decompresser(a[0],a[1])
+    print(b)
