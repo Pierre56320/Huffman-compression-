@@ -1,9 +1,5 @@
 #TM-PG-VG
 #from pympler import asizeof
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 
 class huffman:
     @staticmethod
@@ -41,7 +37,6 @@ class huffman:
             else: #  cas d'un nœud
                 code_courant(prefixe + '0', noeud[0])
                 code_courant(prefixe + '1', noeud[1])
-
         code_courant('', arbre)
         return codes
 
