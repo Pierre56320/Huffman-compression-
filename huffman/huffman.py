@@ -27,7 +27,6 @@ def regime_Arbre(arbre):
 
 def trouver_Codes(arbre):
     codes = {}
-
     def code_courant(prefixe, noeud):
         if type(noeud) == str:  #  cas d'une feuille
             codes[noeud] = prefixe
@@ -38,14 +37,14 @@ def trouver_Codes(arbre):
     code_courant('', arbre)
     return codes
 
-def encodage(chaine, arbre):
+def encodage(chaine, codes):
     print("chaine : ", chaine)
-    print("arbre : ", arbre)
-    code_binaire = arbre
+    print("codes : ", codes)
+    code_binaire = codes
     chaine_binaire = ''
     for c in chaine:
         chaine_binaire = chaine_binaire + code_binaire[c]
-    return chaine_binaire
+    return bin(int(chaine_binaire,2))
 
 def decodage(codes, code):
     chaine = ''
@@ -79,14 +78,7 @@ def afficher_arbre(arbre, valeurs):
         print('\n')
 
 if __name__ == "__main__":
-    arbre = cree_arbre(occurrence("BONJOUR TOUT LE MONDE"))
+    chaine = "BONJOUR TOUT LE MONDE"
+    arbre = trouver_Codes(cree_arbre(occurrence(chaine)))
     print(arbre)
-    afficher_arbre(arbre, trouver_Codes(arbre))
-
-
-
-
-
-
-
-
+    print(encodage(chaine,arbre))

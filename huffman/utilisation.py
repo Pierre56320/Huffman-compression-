@@ -1,4 +1,5 @@
 import huffman
+
 class h_objet():
     def __init__(self,mot):
         self.hobjet = mot
