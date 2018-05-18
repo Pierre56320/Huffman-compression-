@@ -46,13 +46,17 @@ def encodage(chaine, codes):
         chaine_binaire = chaine_binaire + code_binaire[c]
     return bin(int(chaine_binaire,2))
 
-def decodage(codes, code):
-    chaine = ''
-    i = ''
-    if code:
-        i += next([bits for bits in code])
-        chaine = codes[str(i)] + decodage(codes, code[len(str(i)):])
-    return chaine
+def decodage(code,texte_binaire):
+    texte = ''
+    tampon = ''
+    texte_binaire = str(texte_binaire)
+    print(texte_binaire)
+    for b in texte_binaire:
+        tampon = tampon+b
+        if tampon in code:
+            texte = texte+code[tampon]
+            tampon = ''
+    return texte
 
 def afficher_arbre(arbre, valeurs):
     affichage = []
@@ -81,4 +85,7 @@ if __name__ == "__main__":
     chaine = "BONJOUR TOUT LE MONDE"
     arbre = trouver_Codes(cree_arbre(occurrence(chaine)))
     print(arbre)
-    print(encodage(chaine,arbre))
+    code = encodage(chaine,arbre)
+    print(arbre,code)
+    decode = decodage(arbre,code)
+    print(decode)
