@@ -23,7 +23,7 @@ def regime_Arbre(arbre):
     if type(reste) == str:
         return reste
     else:
-        return (regime_Arbre(reste[0]), regime_Arbre(reste[1]))
+        return regime_Arbre(reste[0]), regime_Arbre(reste[1])
 
 def trouver_Codes(arbre):
     codes = {}
@@ -33,7 +33,6 @@ def trouver_Codes(arbre):
         else:  #  cas d'un nœud
             code_courant(prefixe + '0', noeud[0])
             code_courant(prefixe + '1', noeud[1])
-
     code_courant('', arbre)
     return codes
 
@@ -41,12 +40,17 @@ def encodage(chaine, codes_binaire):
     chaine_binaire = ''
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
-    return bin(int('1'+chaine_binaire,2)) #on ajoute un 1 de manière a garder les 0 en debut de chaine
+    chaine_binaire_decoupe = []
+    while chaine_binaire:
+        chaine_binaire_decoupe.append(chaine_binaire[:8])
+        chaine_binaire = chaine_binaire[8:]
+    return bytes([int(group, 2) for group in chaine_binaire_decoupe])
 
 def decodage(codes, mot_binaire):
     mot_decode = ''
     tampon = ''
-    mot_binaire = mot_binaire[3:] #on ignore le 1 du debut de chaine
+    print(mot_binaire)
+    return
     codes = {v: k for k, v in codes.items()}
     for b in mot_binaire:
         tampon = tampon+b
@@ -87,6 +91,5 @@ def decompresser(mot_binaire,codes_binaires):
 
 if __name__ == "__main__":
     chaine = "ceci est un test de compréssion"
-    a = compresser(chaine)
-    b= decompresser(a[0],a[1])
-    print(b)
+    a,b = compresser(chaine)
+    c= decompresser(a,b)

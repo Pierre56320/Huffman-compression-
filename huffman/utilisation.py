@@ -1,12 +1,18 @@
 import huffman
 
-class h_objet():
-    def __init__(self,mot):
-        self.hobjet = mot
+fichier = "test.txt"
 
-    def compresser(self):
-        arbre = huffman.cree_arbre(huffman.occurrence(self.hobjet))
-        self.hobjet = (arbre, huffman.encodage(huffman.trouver_Codes(arbre),self.hobjet))
+def compress_file(fichier_entree, fichier_sortie="test.bin"):
+    with open(fichier, 'r', encoding='utf_8') as fent, open(fichier_sortie, 'wb') as fsort:
+        contenu = fent.read()
+        code, arbre = huffman.compresser(contenu)
+        print(code)
+        fsort.write(code)
+        fent.close()
+        fsort.close()
+    return
 
-    def decompresser(self):
-        self.hobjet = huffman.decodage(huffman.trouver_Codes(self.hobjet[0]),self.hobjet[1])
+compress_file(fichier)
+
+
+
