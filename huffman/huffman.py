@@ -1,6 +1,5 @@
 #TM-PG-VG
-#from pympler import asizeof
-
+from bitstring import BitArray
 
 def occurrence(chaine):
     occ = {}
@@ -40,17 +39,25 @@ def encodage(chaine, codes_binaire):
     chaine_binaire = ''
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
+    print(chaine_binaire)
+    nb_bits_rest = len(chaine_binaire)%8
     chaine_binaire_decoupe = []
     while chaine_binaire:
         chaine_binaire_decoupe.append(chaine_binaire[:8])
         chaine_binaire = chaine_binaire[8:]
+    for k in range(8 - nb_bits_rest): #On rajoute des 0 de manière a obtenir un octet
+        chaine_binaire_decoupe[-1]= chaine_binaire_decoupe[-1]+'0'
+    #on indique sur le dernier octet le nb de 0 a enlever
+    chaine_binaire_decoupe.append(str(bin(8 - nb_bits_rest))[2:].zfill(8))
+    print(chaine_binaire_decoupe)
     return bytes([int(group, 2) for group in chaine_binaire_decoupe])
 
 def decodage(codes, mot_binaire):
     mot_decode = ''
     tampon = ''
-    print(mot_binaire)
-    return
+    mot_binaire = str(BitArray(mot_binaire).bin)
+    mot_binaire, nb_0_sup = mot_binaire[:-8], int(mot_binaire[-8:],2)
+    mot_binaire = mot_binaire[:-nb_0_sup] #On supprime les 0
     codes = {v: k for k, v in codes.items()}
     for b in mot_binaire:
         tampon = tampon+b
@@ -63,7 +70,6 @@ def afficher_arbre(arbre, valeurs):
     affichage = []
     for k in range(10):
         affichage.append([])
-
     def code_courant(noeud, profondeur):
         if type(noeud) == str:  #  cas d'une feuille
             affichage[profondeur].append(noeud)
@@ -90,6 +96,7 @@ def decompresser(mot_binaire,codes_binaires):
 
 
 if __name__ == "__main__":
-    chaine = "ceci est un test de compréssion"
+    chaine = "ceci est un test de comp gnirag  rn675Giç9"
     a,b = compresser(chaine)
     c= decompresser(a,b)
+    print(c)
