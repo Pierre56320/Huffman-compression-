@@ -1,5 +1,6 @@
 #TM-PG-VG
 from bitstring import BitArray
+import bson
 
 def occurrence(chaine):
     occ = {}
@@ -36,10 +37,16 @@ def trouver_Codes(arbre):
     return codes
 
 def encodage(chaine, codes_binaire):
-    chaine_binaire = ''
+    chaine_binaire = bson.dumps(codes_binaire)
+    chaine_binaire = BitArray(chaine_binaire).bin
+    taille_codes_binaire = str(bin(len(chaine_binaire)))[2:]
+    print(str(bin(len(chaine_binaire)))[2:])
+    chaine_binaire = "1" + taille_codes_binaire + chaine_binaire
+    for k in range(len(taille_codes_binaire)):
+        chaine_binaire = "0" + chaine_binaire
+    print(chaine_binaire)
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
-    print(chaine_binaire)
     nb_bits_rest = len(chaine_binaire)%8
     chaine_binaire_decoupe = []
     while chaine_binaire:
@@ -49,13 +56,24 @@ def encodage(chaine, codes_binaire):
         chaine_binaire_decoupe[-1]= chaine_binaire_decoupe[-1]+'0'
     #on indique sur le dernier octet le nb de 0 a enlever
     chaine_binaire_decoupe.append(str(bin(8 - nb_bits_rest))[2:].zfill(8))
-    print(chaine_binaire_decoupe)
     return bytes([int(group, 2) for group in chaine_binaire_decoupe])
 
-def decodage(codes, mot_binaire):
+def decodage(mot_binaire):
     mot_decode = ''
     tampon = ''
+    k = 0
+    print(mot_binaire)
     mot_binaire = str(BitArray(mot_binaire).bin)
+    print(mot_binaire)
+    while mot_binaire[k] == "0":
+        k += 1
+    taille_arbre, mot_binaire = mot_binaire[k+1: k+k+1],mot_binaire[k+k+1:]
+    arbre, mot_binaire = mot_binaire[:int(taille_arbre,2)], mot_binaire[int(taille_arbre,2):]
+    arbre_binaire_decoupe = []
+    while arbre:
+        arbre_binaire_decoupe.append(arbre[:8])
+        arbre = arbre[8:]
+    codes = bson.loads(bytes([int(group, 2) for group in arbre_binaire_decoupe]))
     mot_binaire, nb_0_sup = mot_binaire[:-8], int(mot_binaire[-8:],2)
     mot_binaire = mot_binaire[:-nb_0_sup] #On supprime les 0
     codes = {v: k for k, v in codes.items()}
@@ -89,14 +107,14 @@ def afficher_arbre(arbre, valeurs):
 
 def compresser(chaine):
     codes_binaires = trouver_Codes(cree_arbre(occurrence(chaine)))
-    return (encodage(chaine,codes_binaires),codes_binaires)
+    return encodage(chaine,codes_binaires)
 
-def decompresser(mot_binaire,codes_binaires):
-    return decodage(codes_binaires,mot_binaire)
+def decompresser(mot_binaire):
+    return decodage(mot_binaire)
 
 
 if __name__ == "__main__":
     chaine = "ceci est un test de comp gnirag  rn675Giç9"
-    a,b = compresser(chaine)
-    c= decompresser(a,b)
+    a = compresser(chaine)
+    c= decompresser(a)
     print(c)
