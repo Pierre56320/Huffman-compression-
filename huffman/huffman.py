@@ -40,13 +40,12 @@ def encodage(chaine, codes_binaire):
     chaine_binaire = bson.dumps(codes_binaire)
     chaine_binaire = BitArray(chaine_binaire).bin
     taille_codes_binaire = str(bin(len(chaine_binaire)))[2:]
-    print(str(bin(len(chaine_binaire)))[2:])
     chaine_binaire = "1" + taille_codes_binaire + chaine_binaire
     for k in range(len(taille_codes_binaire)):
         chaine_binaire = "0" + chaine_binaire
-    print(chaine_binaire)
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
+    print(chaine_binaire)
     nb_bits_rest = len(chaine_binaire)%8
     chaine_binaire_decoupe = []
     while chaine_binaire:
@@ -62,7 +61,6 @@ def decodage(mot_binaire):
     mot_decode = ''
     tampon = ''
     k = 0
-    print(mot_binaire)
     mot_binaire = str(BitArray(mot_binaire).bin)
     print(mot_binaire)
     while mot_binaire[k] == "0":
