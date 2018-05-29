@@ -1,8 +1,7 @@
 import huffman
 import base64
-from io import BytesIO
 
-def compress_file(fichier_entree):
+def compress_fichier(fichier_entree):
     with open(fichier_entree, 'r', encoding='utf_8') as fent, open(fichier_entree[:-4]+'.bin', 'wb') as fsort:
         contenu = fent.read()
         code = huffman.compresser(contenu)
@@ -11,7 +10,7 @@ def compress_file(fichier_entree):
         fsort.close()
     return
 
-def decompress_file(fichier_entree):
+def decompress_fichier(fichier_entree):
     with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'_décompressé.txt', 'w', encoding='utf-8') as fsort:
         contenu = fent.read()
         chaine = huffman.decompresser(contenu)
@@ -30,7 +29,7 @@ def compress_image(fichier_entree):
     return
 
 def decompress_image(fichier_entree):
-    with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'décompressé.bmp', 'wb') as fsort:
+    with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'décompressé.tif', 'wb') as fsort:
         contenu = fent.read()
         chaine = huffman.decompresser(contenu)
         chaine = chaine[2:-1]
@@ -40,9 +39,9 @@ def decompress_image(fichier_entree):
         fsort.close()
     return
 
-#compress_file("test.txt")
-#decompress_file("test.bin")
-compress_image("test.bmp")
+#compress_fichier("test.txt")
+#decompress_fichier("test.bin")
+compress_image("test.tif")
 decompress_image("test.bin")
 
 
