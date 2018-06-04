@@ -21,17 +21,17 @@ def occurrence(chaine):
 
 def cree_arbre(chaine):
     occ = occurrence(chaine)
-    arbre = [(occ, lettre) for (lettre, occ) in occ.items()]
+    arbre = [(occ, lettre) for (lettre, occ) in occ.items()] #on met l'occurence en premier
     arbre.sort()  # mets les occurences dans l'ordre
     while len(arbre) > 1:
         noeud1, noeud2 = arbre[0], arbre[1]
         arbre = arbre[2:]
-        arbre.append((noeud1[0] + noeud2[0], (noeud1, noeud2)))
-        arbre.sort(key=lambda x: x[0])
+        arbre.append((noeud1[0] + noeud2[0], (noeud1, noeud2))) #on regroupe les branches et on additionne les occurences
+        arbre.sort(key=lambda x: x[0]) #on spécifie que l'on veut classer selon le poids des occurences d'indice 0
     print("fin creer arbre")
     return regime_Arbre(arbre[0])
 
-def regime_Arbre(arbre):
+def regime_Arbre(arbre): #permet de supprimer toutes les occurence. Garde juste les caractères
     reste = arbre[1]
     if type(reste) == str:
         return reste
@@ -51,13 +51,13 @@ def trouver_Codes(arbre):
     return codes
 
 def encodage(chaine, codes_binaire):
-    chaine_binaire = bson.dumps(codes_binaire)
-    chaine_binaire = BitArray(chaine_binaire).bin
-    taille_codes_binaire = str(bin(len(chaine_binaire)))[2:]
-    chaine_binaire = "1" + taille_codes_binaire + chaine_binaire
+    chaine_binaire = bson.dumps(codes_binaire) #on transforme le dictionnaire en bytes
+    chaine_binaire = BitArray(chaine_binaire).bin #puis en chaine de caractère de 0 et de 1
+    taille_codes_binaire = str(bin(len(chaine_binaire)))[2:] #on recupère la taille de de la chaine binaire et on transforme ce nombre en bits
+    chaine_binaire = "1" + taille_codes_binaire + chaine_binaire #on rajoute un marqueur
     # print(mot_binaire)
     for k in range(len(taille_codes_binaire)):
-        chaine_binaire = "0" + chaine_binaire
+        chaine_binaire = "0" + chaine_binaire #on met le même nombre de 0 au début de la chaine que la longueur
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
     nb_bits_rest = len(chaine_binaire)%8
