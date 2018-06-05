@@ -1,6 +1,7 @@
 #TM-PG-VG
 from bitstring import BitArray
 import bson
+import Entropie
 
 def occurrence(chaine):
     """calcule le nombre d'apparences de chaque caractère dans une chaine"""
@@ -68,6 +69,7 @@ def encodage(chaine, codes_binaire):
     #on sépare la chaine de caractère en liste de chaines de 8 caractères
     #on converti les octets en base 2 (0-255)
     #on converti ensuite se nombre en objet python bytes
+    print("La longueure minimale réelle est : "+ str(len(chaine_binaire)/len(chaine)))
     return bytes(int(chaine_binaire[i:i+8],2) for i in range(0,len(chaine_binaire),8))
 
 def decodage(mot_binaire):
@@ -84,7 +86,7 @@ def decodage(mot_binaire):
     codes = bson.loads(bytes(int(arbre[i:i+8],2) for i in range(0,len(arbre),8)))
     mot_binaire, nb_0_sup = mot_binaire[:-8], int(mot_binaire[-8:],2)
     mot_binaire = mot_binaire[:-nb_0_sup] #On supprime les 0
-    codes = {v: k for k, v in codes.items()}
+    codes = {v: c for c, v in codes.items()}
     for b in mot_binaire:
         tampon = tampon+b
         if tampon in codes:
@@ -123,6 +125,7 @@ def afficher_arbre(arbre, valeurs):
         print('\n')
 
 def compresser(chaine):
+    print("La longueure minimale théorique est : " + str(Entropie.entropie(chaine)))
     arbre = cree_arbre(chaine)
     codes_binaires = trouver_Codes(arbre)
     return encodage(chaine,codes_binaires)
@@ -132,11 +135,14 @@ def decompresser(mot_binaire):
 
 
 if __name__ == "__main__":
-    chaine = "ceci est un test de comp gnirag  rn675Giç9"
-    #arbre  = cree_arbre(chaine)
-    #codes = trouver_Codes(arbre)
-    #afficher_arbre(arbre,codes)
+    chaine1 = "ceci est un test de comp gnirag  rn675Giç9"
+    chaine = "ABRACADABRA"
+    arbre  = cree_arbre(chaine)
+    codes = trouver_Codes(arbre)
+    print("La longueure minimale théorique est : " + Entropie.entropie(chaine))
+    #print(Entropie.longueur_moyenne(codes))
+    afficher_arbre(arbre,codes)
 
-    a = compresser(chaine)
-    c= decompresser(a)
-    print(c)
+    #a = compresser(chaine)
+    #c= decompresser(a)
+    #print(c)
