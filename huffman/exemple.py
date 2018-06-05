@@ -1,5 +1,5 @@
-from modules.bitstring import bitstring
-from modules import bson
+import bitstring
+import bson
 
 Voitures = {"citroen":3,"renaud":5}
 chaine = bson.dumps(Voitures) #on transforme le dictionnaire en binary string

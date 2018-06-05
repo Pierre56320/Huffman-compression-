@@ -1,6 +1,6 @@
 #TM-PG-VG
-from modules.bitstring import bitstring
-from modules import bson
+import bitstring
+import bson
 import Entropie
 
 def occurrence(chaine):
