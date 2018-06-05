@@ -12,17 +12,17 @@ from time import sleep,time
 
 def compress_fichier(fichier_entree):
     """Prend un fichier en paramètre et le compresse"""
-    if fichier_entree[-4:] == ".bin":
+    if fichier_entree[-4:] == ".pvt":
         showwarning("","Le fichier est déjà compressé")
     elif fichier_entree[-4:] == ".txt": #si il s'agit d'un fichier texte on le lit normalement
-        with open(fichier_entree, 'r', encoding='utf_8') as fent, open(fichier_entree[:-4] + '.bin', 'wb') as fsort:
+        with open(fichier_entree, 'r', encoding='utf_8') as fent, open(fichier_entree[:-4] + '.pvt', 'wb') as fsort:
             contenu = fent.read()
             code = huffman.compresser(contenu+".txt") #on encode également l'extension
             fsort.write(code)
             fent.close()
             fsort.close()
     else: # sinon on le lit en tant que fichier binaire
-        with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'.bin', 'wb') as fsort:
+        with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'.pvt', 'wb') as fsort:
             contenu = base64.b64encode(fent.read()) #transforme les fichiers binaires en chaine de caractère
             code = huffman.compresser(str(contenu)+fichier_entree[-4:])
             fsort.write(code)
@@ -92,7 +92,7 @@ class Application(object):
 
     def tauxDeCompression(self):
         taille_fichier_init = os.path.getsize(self.cheminFichier)
-        taille_fichier_comp = os.path.getsize(self.cheminFichier[:-4]+'.bin')
+        taille_fichier_comp = os.path.getsize(self.cheminFichier[:-4]+'.pvt')
         self.tdComp = 'Pour "'+str(self.cheminFichier.split('/')[-1])+'" le taux de compression est : '\
                       +str((1 - (taille_fichier_comp /taille_fichier_init))*100)[:5]+'%'\
                       +'\n'+"Temps de compression : "+ str(round(self.fin - self.debut,5))\
