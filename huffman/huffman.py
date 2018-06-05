@@ -56,19 +56,21 @@ def trouver_Codes(arbre):
 def encodage(chaine, codes_binaire):
     chaine_binaire = bson.dumps(codes_binaire) #on transforme le dictionnaire  en binary string
     chaine_binaire = bitstring.BitArray(chaine_binaire).bin #puis en chaine de caractère de 0 et de 1
-    taille_codes_binaire = str(bin(len(chaine_binaire)))[2:] #on recupère la taille de de la chaine binaire et on transforme ce nombre en bits
+    taille_codes_binaire = str(bin(len(chaine_binaire)))[2:] #on recupère la taille de la chaine binaire et on
+                                                             #transforme ce nombre en bits
     chaine_binaire = "1" + taille_codes_binaire + chaine_binaire #on rajoute un marqueur
     # print(mot_binaire)
     for k in range(len(taille_codes_binaire)):
-        chaine_binaire = "0" + chaine_binaire #on met le même nombre de 0 au début de la chaine que la longueur
+        chaine_binaire = "0" + chaine_binaire #on met le même nombre de 0 au début de la chaine que la longueur de
+                                              #taille_codes_binaire
     for c in chaine:
         chaine_binaire = chaine_binaire + codes_binaire[c]
     nb_bits_rest = len(chaine_binaire)%8
-    for k in range(8 - nb_bits_rest): #On rajoute des 0 de manière a obtenir un octet
+    for k in range(8 - nb_bits_rest): #On rajoute des 0 de manière à obtenir un octet
         chaine_binaire= chaine_binaire +'0'
-    #on indique sur le dernier octet le nb de 0 a enlever
+    #on indique sur le dernier octet le nb de 0 à enlever
     chaine_binaire = chaine_binaire + str(bin(8 - nb_bits_rest))[2:].zfill(8)
-    # on sépare la chaine de caractère en liste de chaines de 8 caractères
+    # on sépare la chaine de caractère en une liste de chaines de 8 caractères
     # on converti les octets en base 2 (0-255)
     # on converti ensuite se nombre en objet python bytes
     """chaine_binaire_decoupe = [] 
@@ -107,7 +109,7 @@ def afficher_arbre(arbre, valeurs):
         if type(noeud) == str:
             return 1;
         else:
-            # comparer la profondeur de chaque sous-element
+            # comparer la profondeur de chaque sous-élement
             profondeurG = profondeur_max(noeud[0])
             profondeurD = profondeur_max(noeud[1])
             return max(profondeurD, profondeurG)+1
@@ -132,7 +134,7 @@ def afficher_arbre(arbre, valeurs):
         print('\n')
 
 def compresser(chaine):
-    print("La longueur minimale théorique est : " + str(Entropie.entropie(chaine)/8))
+    print("La longueur minimale théorique est : " + str(round(Entropie.entropie(chaine)/8,4)))
     arbre = cree_arbre(chaine)
     codes_binaires = trouver_Codes(arbre)
     return encodage(chaine,codes_binaires)

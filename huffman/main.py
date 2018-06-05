@@ -17,7 +17,7 @@ def compress_fichier(fichier_entree):
     elif fichier_entree[-4:] == ".txt": #si il s'agit d'un fichier texte on le lit normalement
         with open(fichier_entree, 'r', encoding='utf_8') as fent, open(fichier_entree[:-4] + '.bin', 'wb') as fsort:
             contenu = fent.read()
-            code = huffman.compresser(contenu+".txt") #on encode également l'extansion
+            code = huffman.compresser(contenu+".txt") #on encode également l'extension
             fsort.write(code)
             fent.close()
             fsort.close()
@@ -59,7 +59,7 @@ class Application(object):
         tk.Button(self.cadre2, text='Quitter', command=self.fen.destroy).pack(side='right', padx=25, pady=15)
         self.bouton1 = tk.Button(self.cadre2, text='Choisir un Fichier', command=self.ChoisirFichier)
         self.bouton1.pack(side='left', padx=25, pady=15)
-        self._thread1 = None #on va utiliser deux threads, le premier pour la fonction de compression/decompression
+        self._thread1 = None #on va utiliser deux threads, le premier pour la fonction de compression/décompression
         self._thread2 = None #le deuxième pour l'animation
         self.fen.mainloop()
 
@@ -76,7 +76,7 @@ class Application(object):
             self.Label1 = tk.Label(self.cadre, text=self.cheminFichier, fg='blue')
             self.Label1.pack(side='left', pady=15, padx = 10)
             self.bouton1.configure(text="Compresser", command = self.init_comp)
-            self.bouton2 = tk.Button(self.cadre2, text='Decompresser', command=self.init_decomp)
+            self.bouton2 = tk.Button(self.cadre2, text='Décompresser', command=self.init_decomp)
             self.bouton2.pack(side='left', pady=15)
 
     def supFichier(self):
@@ -108,15 +108,15 @@ class Application(object):
 
     def init_comp(self):
         self.btnx.destroy()
-        self.bouton1.configure(text="Choisir un Fichier", command=self.ChoisirFichier)
+        self.bouton1.configure(text="Choisir un Fichier", command=self.ChoisirFichier, state = DISABLED)
         self.bouton2.destroy()
-        if self._thread1 is None: # on démare le 1er thread et on l'associe à la fonction de compression
+        if self._thread1 is None: # on démarre le 1er thread et on l'associe à la fonction de compression
             self._thread1 = Thread(target=self.compress)
             self._thread1.start()
             self.init_anim_comp()
 
     def init_anim_comp(self):
-        if self._thread2 is None: #on démare le second thread et on l'associa a la fonction d'animation
+        if self._thread2 is None: #on démarre le second thread et on l'associe à la fonction d'animation
             self._thread2 = Thread(target=self.animation_compression)
             self._thread2.start()
 
@@ -131,6 +131,7 @@ class Application(object):
         if self._thread2 is not None: #on arrête le second thread
             self._thread2 = None
         self.tauxDeCompression()
+        self.bouton1.configure(state=ACTIVE)
         showinfo("", "Fichier compressé")
 
     #on gère de la même manière les méthodes pour la décompression
