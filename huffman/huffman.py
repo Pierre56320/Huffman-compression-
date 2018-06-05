@@ -21,7 +21,6 @@ def occurrence(chaine):
     print("fin occ")
     return occ
 
-
 def cree_arbre(chaine):
     occ = occurrence(chaine)
     arbre = [(occ, lettre) for (lettre, occ) in occ.items()] #on met l'occurence en premier
@@ -50,7 +49,7 @@ def trouver_Codes(arbre):
             code_courant(prefixe + '0', noeud[0])
             code_courant(prefixe + '1', noeud[1])
     code_courant('', arbre)
-    print("fin trouver codes")
+    #print("fin trouver codes")
     return codes
 
 def encodage(chaine, codes_binaire):
@@ -59,7 +58,6 @@ def encodage(chaine, codes_binaire):
     taille_codes_binaire = str(bin(len(chaine_binaire)))[2:] #on recupère la taille de la chaine binaire et on
                                                              #transforme ce nombre en bits
     chaine_binaire = "1" + taille_codes_binaire + chaine_binaire #on rajoute un marqueur
-    # print(mot_binaire)
     for k in range(len(taille_codes_binaire)):
         chaine_binaire = "0" + chaine_binaire #on met le même nombre de 0 au début de la chaine que la longueur de
                                               #taille_codes_binaire
@@ -86,7 +84,7 @@ def decodage(mot_binaire):
     mot_decode = ''
     k = 0
     mot_binaire = str(bitstring.BitArray(mot_binaire).bin)
-    #print(mot_binaire)
+    print(mot_binaire)
     while mot_binaire[k] == "0":
         k += 1
     taille_arbre, mot_binaire = mot_binaire[k+1: k+k+1],mot_binaire[k+k+1:]
@@ -147,11 +145,21 @@ if __name__ == "__main__":
     chaine1 = "ceci est un test de compréssion"
     chaine = "ABRACADABRA"
     """
+    arbre = cree_arbre(chaine)
+    print(chaine)
+    codes_binaires = trouver_Codes(arbre)
+    print(codes_binaires)
+    octetpur = encodage(chaine, codes_binaires)
+    print(octetpur)
+    print(decodage(octetpur))
+    
+    """
     arbre  = cree_arbre(chaine)
+    print(arbre)
     codes = trouver_Codes(arbre)
-    print("La longueur minimale théorique est : " + str(Entropie.entropie(chaine)/8))
-    #print(Entropie.longueur_moyenne(codes))
-    afficher_arbre(arbre,codes)"""
+    print(codes)
+    afficher_arbre(arbre,codes)
+    """
     a = compresser(chaine)
     c= decompresser(a)
-    print(c)
+    print(c)"""
