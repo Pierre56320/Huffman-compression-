@@ -25,6 +25,7 @@ def compress_fichier(fichier_entree):
         with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'.bin', 'wb') as fsort:
             contenu = base64.b64encode(fent.read()) #transforme les fichiers binaires en chaine de caractère
             code = huffman.compresser(str(contenu)+fichier_entree[-4:])
+            print(len(code))
             fsort.write(code)
             fent.close()
             fsort.close()

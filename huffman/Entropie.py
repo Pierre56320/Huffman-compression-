@@ -33,7 +33,7 @@ def entropie(chaine) :
     for p in prob :
         produit.append(p*log2(1/p))
     H = sum(produit)
-    return H
+    return H*len(chaine)
 
 #Utilisation
 

@@ -69,7 +69,7 @@ def encodage(chaine, codes_binaire):
     #on sépare la chaine de caractère en liste de chaines de 8 caractères
     #on converti les octets en base 2 (0-255)
     #on converti ensuite se nombre en objet python bytes
-    print("La longueure minimale réelle est : "+ str(len(chaine_binaire)/len(chaine)))
+    print("La longueure minimale réelle est : "+ str(len(chaine_binaire)/8))
     return bytes(int(chaine_binaire[i:i+8],2) for i in range(0,len(chaine_binaire),8))
 
 def decodage(mot_binaire):
@@ -125,7 +125,7 @@ def afficher_arbre(arbre, valeurs):
         print('\n')
 
 def compresser(chaine):
-    print("La longueure minimale théorique est : " + str(Entropie.entropie(chaine)))
+    print("La longueure minimale théorique est : " + str(Entropie.entropie(chaine)/8))
     arbre = cree_arbre(chaine)
     codes_binaires = trouver_Codes(arbre)
     return encodage(chaine,codes_binaires)
