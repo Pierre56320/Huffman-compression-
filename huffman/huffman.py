@@ -1,15 +1,17 @@
 #TM-PG-VG
-from bitstring import BitArray
-import bson
+from modules.bitstring import bitstring
+from modules import bson
 import Entropie
 
 def occurrence(chaine):
     """calcule le nombre d'apparences de chaque caractère dans une chaine"""
-    '''
+    """
     occ = {}
-    for caractere in chaine: #evite de recalculer les occurences d'un même caractère plusieurs fois (énorme gain de temps)
-            occ[caractere] = chaine.count(caractere)
-    return occ'''
+    for caractere in chaine: 
+            occ[caractere] = chaine.count(caractere) #beaucoup trop lent avec .count()
+            chaine = chaine.replace(caractere,'')
+    return occ
+    """
     occ = {}
     for caractere in chaine:
         if caractere in occ:
@@ -52,8 +54,8 @@ def trouver_Codes(arbre):
     return codes
 
 def encodage(chaine, codes_binaire):
-    chaine_binaire = bson.dumps(codes_binaire) #on transforme le dictionnaire en bytes
-    chaine_binaire = BitArray(chaine_binaire).bin #puis en chaine de caractère de 0 et de 1
+    chaine_binaire = bson.dumps(codes_binaire) #on transforme le dictionnaire  en binary string
+    chaine_binaire = bitstring.BitArray(chaine_binaire).bin #puis en chaine de caractère de 0 et de 1
     taille_codes_binaire = str(bin(len(chaine_binaire)))[2:] #on recupère la taille de de la chaine binaire et on transforme ce nombre en bits
     chaine_binaire = "1" + taille_codes_binaire + chaine_binaire #on rajoute un marqueur
     # print(mot_binaire)
@@ -66,32 +68,37 @@ def encodage(chaine, codes_binaire):
         chaine_binaire= chaine_binaire +'0'
     #on indique sur le dernier octet le nb de 0 a enlever
     chaine_binaire = chaine_binaire + str(bin(8 - nb_bits_rest))[2:].zfill(8)
-    #on sépare la chaine de caractère en liste de chaines de 8 caractères
-    #on converti les octets en base 2 (0-255)
-    #on converti ensuite se nombre en objet python bytes
-    print("La longueure minimale réelle est : "+ str(len(chaine_binaire)/8))
-    return bytes(int(chaine_binaire[i:i+8],2) for i in range(0,len(chaine_binaire),8))
+    # on sépare la chaine de caractère en liste de chaines de 8 caractères
+    # on converti les octets en base 2 (0-255)
+    # on converti ensuite se nombre en objet python bytes
+    """chaine_binaire_decoupe = [] 
+    while chaine_binaire:
+        chaine_binaire_decoupe.append(chaine_binaire[:8])
+        chaine_binaire = chaine_binaire[8:]
+    return bytes([int(group, 2) for group in chaine_binaire_decoupe])"""
+    #Pour optimiser énormément la rapidité on créé la liste par compréhension
+    print("La longueur réelle est : "+ str(len(chaine_binaire)/8))
+    return bytes([int(chaine_binaire[i:i+8],2) for i in range(0,len(chaine_binaire),8)])
 
 def decodage(mot_binaire):
     mot_decode = ''
-    tampon = ''
     k = 0
-    mot_binaire = str(BitArray(mot_binaire).bin)
+    mot_binaire = str(bitstring.BitArray(mot_binaire).bin)
     #print(mot_binaire)
     while mot_binaire[k] == "0":
         k += 1
     taille_arbre, mot_binaire = mot_binaire[k+1: k+k+1],mot_binaire[k+k+1:]
     arbre, mot_binaire = mot_binaire[:int(taille_arbre,2)], mot_binaire[int(taille_arbre,2):]
-    arbre_binaire_decoupe = []
     codes = bson.loads(bytes(int(arbre[i:i+8],2) for i in range(0,len(arbre),8)))
     mot_binaire, nb_0_sup = mot_binaire[:-8], int(mot_binaire[-8:],2)
     mot_binaire = mot_binaire[:-nb_0_sup] #On supprime les 0
     codes = {v: c for c, v in codes.items()}
+    code_provisoire = ''
     for b in mot_binaire:
-        tampon = tampon+b
-        if tampon in codes:
-            mot_decode = mot_decode + codes[tampon]
-            tampon = ''
+        code_provisoire = code_provisoire+b
+        if code_provisoire in codes:
+            mot_decode = mot_decode + codes[code_provisoire]
+            code_provisoire = ''
     return mot_decode
 
 def afficher_arbre(arbre, valeurs):
@@ -125,7 +132,7 @@ def afficher_arbre(arbre, valeurs):
         print('\n')
 
 def compresser(chaine):
-    print("La longueure minimale théorique est : " + str(Entropie.entropie(chaine)/8))
+    print("La longueur minimale théorique est : " + str(Entropie.entropie(chaine)/8))
     arbre = cree_arbre(chaine)
     codes_binaires = trouver_Codes(arbre)
     return encodage(chaine,codes_binaires)
@@ -135,14 +142,14 @@ def decompresser(mot_binaire):
 
 
 if __name__ == "__main__":
-    chaine1 = "ceci est un test de comp gnirag  rn675Giç9"
+    chaine1 = "ceci est un test de compréssion"
     chaine = "ABRACADABRA"
+    """
     arbre  = cree_arbre(chaine)
     codes = trouver_Codes(arbre)
-    print("La longueure minimale théorique est : " + Entropie.entropie(chaine))
+    print("La longueur minimale théorique est : " + str(Entropie.entropie(chaine)/8))
     #print(Entropie.longueur_moyenne(codes))
-    afficher_arbre(arbre,codes)
-
-    #a = compresser(chaine)
-    #c= decompresser(a)
-    #print(c)
+    afficher_arbre(arbre,codes)"""
+    a = compresser(chaine)
+    c= decompresser(a)
+    print(c)

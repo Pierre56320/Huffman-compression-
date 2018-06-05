@@ -3,7 +3,6 @@
 #Ces fonctions servent à calculer/observer les performances de la compression
 
 from math import log2
-import os.path 
 
 exemple = 'abcdefghijklmp'
 

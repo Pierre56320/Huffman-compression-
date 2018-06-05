@@ -8,7 +8,7 @@ from tkinter.filedialog import *
 from tkinter.messagebox import showwarning, showinfo
 import os
 from threading import Thread
-from time import sleep
+from time import sleep,time
 
 def compress_fichier(fichier_entree):
     """Prend un fichier en paramètre et le compresse"""
@@ -25,7 +25,6 @@ def compress_fichier(fichier_entree):
         with open(fichier_entree, 'rb') as fent, open(fichier_entree[:-4]+'.bin', 'wb') as fsort:
             contenu = base64.b64encode(fent.read()) #transforme les fichiers binaires en chaine de caractère
             code = huffman.compresser(str(contenu)+fichier_entree[-4:])
-            print(len(code))
             fsort.write(code)
             fent.close()
             fsort.close()
@@ -92,11 +91,18 @@ class Application(object):
             pass
 
     def tauxDeCompression(self):
-        self.tdComp = 'Pour "'+str(self.cheminFichier.split('/')[-1])+'" le taux de compression est : '+str((1 - (os.path.getsize(self.cheminFichier[:-4]+'.bin')/os.path.getsize(self.cheminFichier)))*100)[:5]+'%'
+        taille_fichier_init = os.path.getsize(self.cheminFichier)
+        taille_fichier_comp = os.path.getsize(self.cheminFichier[:-4]+'.bin')
+        self.tdComp = 'Pour "'+str(self.cheminFichier.split('/')[-1])+'" le taux de compression est : '\
+                      +str((1 - (taille_fichier_comp /taille_fichier_init))*100)[:5]+'%'\
+                      +'\n'+"Temps de compression : "+ str(round(self.fin - self.debut,5))\
+                      +' secondes' #on ajoute également le temps de compression
         self.Label1.configure(text=self.tdComp, fg='grey')
 
     def compress(self):
+        self.debut = time()
         compress_fichier(self.cheminFichier)
+        self.fin = time()
         if self._thread1 is not None: # arrête l'éxécution du thread
             self._thread1 = None
 
@@ -128,7 +134,6 @@ class Application(object):
         showinfo("", "Fichier compressé")
 
     #on gère de la même manière les méthodes pour la décompression
-
     def decompress(self):
         decompress_fichier(self.cheminFichier)
         if self._thread1 is not None:
