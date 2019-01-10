@@ -1,8 +1,6 @@
 #coding: utf-8
 #TM-PG-VG
 
-print("image.bmp")
-
 import huffman
 import base64
 import tkinter as tk
